@@ -1,0 +1,14 @@
+{% extends '@email/default/notification/body.html.twig' %}
+
+{% block content %}
+    <p>
+        Вы были зарегестрированны на сайте фитнессклуба!
+    </p>
+    <p>
+        Пожалуйста, пройдите по ссылке и измените пароль вашей учетной записи.
+    </p>
+{% endblock %}
+
+{% block action %}
+    <button href="{{ signedUrl }}">Сменить пароль</button>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello FitnessClubController!{% endblock %}
+
+{% block body %}
+    <div class="row">
+            <div class="col-sm-8">
+                <h1>{{ groupFitnessClass.name }}</h1>
+                <p><b>Тренер: {{ groupFitnessClass.couchName }}</b></p>
+                <p>{{ groupFitnessClass.description }}</p>
+            </div>
+            <div class="col-sm-4">
+                <div class="card">
+                    <div class="card-body">
+                        <form>
+                            <h4>Подписаться на уведомления</h4>
+                            <div class="mb-3 form-check">
+                                <input class="form-check-input" type="radio" name="subscription" id="subscription-no" checked>
+                                <label class="form-check-label" for="subscription-no">
+                                    Без подписки
+                                </label>
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input class="form-check-input" type="radio" name="subscription" id="subscription-sms">
+                                <label class="form-check-label" for="subscription-sms">
+                                    СМС
+                                </label>
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input class="form-check-input" type="radio" name="subscription" id="subscription-email">
+                                <label class="form-check-label" for="subscription-email">
+                                    Email
+                                </label>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Отправить</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
