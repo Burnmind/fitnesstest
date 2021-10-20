@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -82,6 +84,16 @@ class User implements UserInterface
      * @ORM\JoinColumn(nullable=false)
      */
     private $sex;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=GroupFitnessClasses::class, inversedBy="subscribedUsers")
+     */
+    private $subscription;
+
+    public function __construct()
+    {
+        $this->subscription = new ArrayCollection();
+    }
 
 
     public function getId(): ?int
@@ -257,6 +269,30 @@ class User implements UserInterface
     public function setSex(Sex $sex): self
     {
         $this->sex = $sex;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|GroupFitnessClasses[]
+     */
+    public function getSubscription(): Collection
+    {
+        return $this->subscription;
+    }
+
+    public function addSubscription(GroupFitnessClasses $subscription): self
+    {
+        if (!$this->subscription->contains($subscription)) {
+            $this->subscription[] = $subscription;
+        }
+
+        return $this;
+    }
+
+    public function removeSubscription(GroupFitnessClasses $subscription): self
+    {
+        $this->subscription->removeElement($subscription);
 
         return $this;
     }

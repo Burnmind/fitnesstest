@@ -7,7 +7,11 @@
         <h1>Профиль</h1>
         <div class="col-6">
             {% if app.user.photo %}
-                <img class="img-fluid img-thumbnail mb-4" src="{{ asset('uploads/images/' ~ app.user.photo) }}" alt="{{ app.user.fullName }}" />
+                <div class="img-wrapper">
+                    <img class="img-fluid img-thumbnail mb-4"
+                         src="{{ asset('uploads/images/' ~ app.user.photo) }}"
+                         alt="{{ app.user.fullName }}" />
+                </div>
             {% endif %}
             <div class="row">
                 <div class="fw-bold">ФИО</div>

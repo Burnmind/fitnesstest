@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\GroupFitnessClassesRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,6 +33,16 @@ class GroupFitnessClasses
      * @ORM\Column(type="text")
      */
     private $description;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="subscription")
+     */
+    private $subscribedUsers;
+
+    public function __construct()
+    {
+        $this->subscribedUsers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -69,6 +81,33 @@ class GroupFitnessClasses
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getSubscribedUsers(): Collection
+    {
+        return $this->subscribedUsers;
+    }
+
+    public function addSubscribedUser(User $subscribedUser): self
+    {
+        if (!$this->subscribedUsers->contains($subscribedUser)) {
+            $this->subscribedUsers[] = $subscribedUser;
+            $subscribedUser->addSubscription($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubscribedUser(User $subscribedUser): self
+    {
+        if ($this->subscribedUsers->removeElement($subscribedUser)) {
+            $subscribedUser->removeSubscription($this);
+        }
 
         return $this;
     }
