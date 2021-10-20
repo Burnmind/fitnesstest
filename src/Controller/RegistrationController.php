@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Form\ChangePasswordType;
 use App\Repository\UserRepository;
+use App\Security\AppAuthenticator;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -11,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,19 +22,28 @@ class RegistrationController extends AbstractController
     private VerifyEmailHelperInterface $verifyEmailHelper;
     private EntityManagerInterface $entityManager;
     private UserPasswordEncoderInterface $passwordEncoder;
+    private AppAuthenticator $authenticator;
+    private GuardAuthenticatorHandler $guardHandler;
 
-    public function __construct(VerifyEmailHelperInterface $emailHelper, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(VerifyEmailHelperInterface $emailHelper, EntityManagerInterface $entityManager,
+                                UserPasswordEncoderInterface $passwordEncoder, AppAuthenticator $authenticator, GuardAuthenticatorHandler $guardHandler)
     {
         $this->verifyEmailHelper = $emailHelper;
         $this->entityManager = $entityManager;
         $this->passwordEncoder = $passwordEncoder;
+        $this->authenticator = $authenticator;
+        $this->guardHandler = $guardHandler;
     }
 
     /**
-     * @Route("/change-password", name="registration_change_password_route")
+     * @Route("/change-password", name="registration_change_password")
      */
     public function changePassword(Request $request, UserRepository $userRepository): Response
     {
+        if ($this->getUser()) {
+            return $this->redirectToRoute('class_list');
+        }
+
         $id = $request->get('id');
         if (null === $id) {
             return $this->redirectToRoute('class_list');
@@ -54,11 +65,17 @@ class RegistrationController extends AbstractController
         if ($changePasswordForm->isSubmitted() && $changePasswordForm->isValid()) {
             $password = $this->passwordEncoder->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
+            $user->setIsVerified(true);
 
             $this->entityManager->persist($user);
             $this->entityManager->flush();
 
-            return $this->redirectToRoute('app_login');
+            return $this->guardHandler->authenticateUserAndHandleSuccess(
+                $user,
+                $request,
+                $this->authenticator,
+                'main'
+            );
         }
 
         return $this->render('registration/change_password.html.twig', [

@@ -26,10 +26,10 @@ class AppAuthenticator extends AbstractFormLoginAuthenticator implements Passwor
 
     public const LOGIN_ROUTE = 'app_login';
 
-    private $entityManager;
-    private $urlGenerator;
-    private $csrfTokenManager;
-    private $passwordEncoder;
+    private EntityManagerInterface $entityManager;
+    private UrlGeneratorInterface $urlGenerator;
+    private CsrfTokenManagerInterface $csrfTokenManager;
+    private UserPasswordEncoderInterface $passwordEncoder;
 
     public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
     {
@@ -67,7 +67,13 @@ class AppAuthenticator extends AbstractFormLoginAuthenticator implements Passwor
             throw new InvalidCsrfTokenException();
         }
 
-        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $credentials['email']]);
+        $user = $this->entityManager
+            ->getRepository(User::class)
+            ->findOneBy([
+                'email' => $credentials['email'],
+                'isVerified' => true,
+                'isBlocked' => false
+            ]);
 
         if (!$user) {
             throw new UsernameNotFoundException('Email could not be found.');
@@ -91,7 +97,12 @@ class AppAuthenticator extends AbstractFormLoginAuthenticator implements Passwor
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey)
     {
-        return new RedirectResponse($this->urlGenerator->generate('class_list'));
+        $routeName = 'class_list';
+        if ($request->attributes->get('_route') == 'registration_change_password') {
+            $routeName = 'profile';
+        }
+
+        return new RedirectResponse($this->urlGenerator->generate($routeName));
     }
 
     protected function getLoginUrl()

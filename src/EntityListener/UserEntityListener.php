@@ -31,7 +31,7 @@ class UserEntityListener
     public function postPersist(User $user, LifecycleEventArgs $event)
     {
         $signatureComponents =  $this->verifyEmailHelper->generateSignature(
-            'registration_change_password_route',
+            'registration_change_password',
             $user->getId(),
             $user->getEmail(),
             ['id' => $user->getId()]

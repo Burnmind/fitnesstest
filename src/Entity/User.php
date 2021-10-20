@@ -39,9 +39,6 @@ class User implements UserInterface
      *      minMessage = "Пароль должен содержать не меньше {{ limit }} символов",
      *      maxMessage = "Пароль должен содержать не меньше {{ limit }} символов"
      * )
-     * @Assert\NotBlank(
-     *     message="Пароль не должен быть пустым"
-     * )
      */
     private $password;
 

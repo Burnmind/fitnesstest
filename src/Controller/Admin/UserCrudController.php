@@ -31,7 +31,7 @@ class UserCrudController extends AbstractCrudController
                 ->setUploadDir('public/uploads/images/'),
             TextField::new('username'),
             TextField::new('fullName'),
-            EmailField::new('email'),
+            EmailField::new('email')->onlyWhenCreating(),
             TelephoneField::new('phone'),
             DateField::new('dateOfBirth'),
             ChoiceField::new('sex')->setChoices(fn() => ['Мужской' => 0, 'Женский' => 1]),
