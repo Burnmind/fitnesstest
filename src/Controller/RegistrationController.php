@@ -11,7 +11,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
@@ -21,16 +20,14 @@ class RegistrationController extends AbstractController
 {
     private VerifyEmailHelperInterface $verifyEmailHelper;
     private EntityManagerInterface $entityManager;
-    private UserPasswordEncoderInterface $passwordEncoder;
     private AppAuthenticator $authenticator;
     private GuardAuthenticatorHandler $guardHandler;
 
     public function __construct(VerifyEmailHelperInterface $emailHelper, EntityManagerInterface $entityManager,
-                                UserPasswordEncoderInterface $passwordEncoder, AppAuthenticator $authenticator, GuardAuthenticatorHandler $guardHandler)
+                                AppAuthenticator $authenticator, GuardAuthenticatorHandler $guardHandler)
     {
         $this->verifyEmailHelper = $emailHelper;
         $this->entityManager = $entityManager;
-        $this->passwordEncoder = $passwordEncoder;
         $this->authenticator = $authenticator;
         $this->guardHandler = $guardHandler;
     }
@@ -63,8 +60,6 @@ class RegistrationController extends AbstractController
         $changePasswordForm = $this->createForm(ChangePasswordType::class, $user);
         $changePasswordForm->handleRequest($request);
         if ($changePasswordForm->isSubmitted() && $changePasswordForm->isValid()) {
-            $password = $this->passwordEncoder->encodePassword($user, $user->getPassword());
-            $user->setPassword($password);
             $user->setIsVerified(true);
 
             $this->entityManager->persist($user);

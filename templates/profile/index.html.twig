@@ -3,11 +3,41 @@
 {% block title %} Профиль {% endblock %}
 
 {% block body %}
-    <div class="row justify-content-center align-items-center">
-        <div class="col-4">
-            <h1>Профиль</h1>
-
-            
+    <div class="row justify-content-center">
+        <h1>Профиль</h1>
+        <div class="col-6">
+            {% if app.user.photo %}
+                <img class="img-fluid img-thumbnail mb-4" src="{{ asset('uploads/images/' ~ app.user.photo) }}" alt="{{ app.user.fullName }}" />
+            {% endif %}
+            <div class="row">
+                <div class="fw-bold">ФИО</div>
+                <div>{{ app.user.fullName }}</div>
+            </div>
+            <div class="row">
+                <div class="fw-bold">Дата рождения</div>
+                <div>{{ app.user.dateOfBirth.format('d.m.Y') }}</div>
+            </div>
+            <div class="row">
+                <div class="fw-bold">Пол</div>
+                <div>{{ app.user.sex }}</div>
+            </div>
+            <div class="row">
+                <div class="fw-bold">Email</div>
+                <div>{{ app.user.email }}</div>
+            </div>
+            <div class="row">
+                <div class="fw-bold">Телефон</div>
+                <div>{{ app.user.phone }}</div>
+            </div>
+        </div>
+        <div class="col-6">
+            {% for message in app.flashes('notification') %}
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            <h4>Сменить пароль</h4>
+            {{ form(change_password_form) }}
         </div>
     </div>
 {% endblock %}
