@@ -58,7 +58,7 @@ class User implements UserInterface
     private $isBlocked;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $email;
 
@@ -78,9 +78,11 @@ class User implements UserInterface
     private $phone;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\ManyToOne(targetEntity=Sex::class)
+     * @ORM\JoinColumn(nullable=false)
      */
     private $sex;
+
 
     public function getId(): ?int
     {
@@ -247,12 +249,12 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getSex(): ?string
+    public function getSex(): ?Sex
     {
         return $this->sex;
     }
 
-    public function setSex(string $sex): self
+    public function setSex(Sex $sex): self
     {
         $this->sex = $sex;
 
