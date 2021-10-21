@@ -23,9 +23,8 @@ class GroupFitnessClassesCrudController extends AbstractCrudController
             TextField::new('couchName'),
             TextEditorField::new('description'),
             AssociationField::new('subscriptions')
-                ->setFormTypeOptions([
-                'by_reference' => false,
-            ]),
+                ->onlyOnIndex()
+                ->setDisabled(),
         ];
     }
 

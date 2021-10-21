@@ -19,15 +19,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class RegistrationController extends AbstractController
 {
     private VerifyEmailHelperInterface $verifyEmailHelper;
-    private EntityManagerInterface $entityManager;
     private AppAuthenticator $authenticator;
     private GuardAuthenticatorHandler $guardHandler;
 
-    public function __construct(VerifyEmailHelperInterface $emailHelper, EntityManagerInterface $entityManager,
-                                AppAuthenticator $authenticator, GuardAuthenticatorHandler $guardHandler)
+    public function __construct(VerifyEmailHelperInterface $emailHelper, AppAuthenticator $authenticator,
+GuardAuthenticatorHandler $guardHandler)
     {
         $this->verifyEmailHelper = $emailHelper;
-        $this->entityManager = $entityManager;
         $this->authenticator = $authenticator;
         $this->guardHandler = $guardHandler;
     }
@@ -62,8 +60,9 @@ class RegistrationController extends AbstractController
         if ($changePasswordForm->isSubmitted() && $changePasswordForm->isValid()) {
             $user->setIsVerified(true);
 
-            $this->entityManager->persist($user);
-            $this->entityManager->flush();
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
 
             return $this->guardHandler->authenticateUserAndHandleSuccess(
                 $user,

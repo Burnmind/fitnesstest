@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Form\ChangePasswordType;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,13 +12,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProfileController extends AbstractController
 {
-    private EntityManagerInterface $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-        $this->entityManager = $entityManager;
-    }
-
     /**
      * @Route("/profile", name="profile")
      */
@@ -34,8 +26,9 @@ class ProfileController extends AbstractController
         $changePasswordForm = $this->createForm(ChangePasswordType::class, $user);
         $changePasswordForm->handleRequest($request);
         if ($changePasswordForm->isSubmitted() && $changePasswordForm->isValid()) {
-            $this->entityManager->persist($user);
-            $this->entityManager->flush();
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
 
             $notifier->send(new Notification('Пароль успешно сменен!', ['browser']));
         }

@@ -4,16 +4,16 @@
 
 {% block body %}
     <div class="row">
-        {% for groupFitnessClass in groupFitnessClasses %}
+        {% for group_fitness_class in group_fitness_classes %}
             <div class="col-sm-6">
-                <a href="{{ path('class_detail', {id: groupFitnessClass.id}) }}" class="card">
+                <a href="{{ path('class_detail', {id: group_fitness_class.id}) }}" class="card">
                     <div class="card-body">
-                        <h5 class="card-title">{{ groupFitnessClass.name }}</h5>
-                        <p class="card-text">{{ groupFitnessClass.couchName }}</p>
+                        <h5 class="card-title">{{ group_fitness_class.name }}</h5>
+                        <p class="card-text">{{ group_fitness_class.couchName }}</p>
                         {% if app.user and app.user.isAdmin %}
                             <div class="admin-info alert alert-info">
                                 <p class="card-text">
-                                    Количество подписчиков: {{ groupFitnessClass.subscriptions.count() }}
+                                    Количество подписчиков: {{ group_fitness_class.subscriptions.count() }}
                                 </p>
                             </div>
                         {% endif %}

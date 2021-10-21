@@ -1,20 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} {{ groupFitnessClass.name }} {% endblock %}
+{% block title %} {{ group_fitness_class.name }} {% endblock %}
 
 {% block body %}
     <div class="row">
-            <div class="col-sm-8">
-                <h1>{{ groupFitnessClass.name }}</h1>
-                <p><b>Тренер: {{ groupFitnessClass.couchName }}</b></p>
-                <p>{{ groupFitnessClass.description|raw }}</p>
-            </div>
+        <div class="col-sm-8">
+            <h1>{{ group_fitness_class.name }}</h1>
+            <p><b>Тренер: {{ group_fitness_class.couchName }}</b></p>
+            <p>{{ group_fitness_class.description|raw }}</p>
+        </div>
+        {% if subscription_form %}
             <div class="col-sm-4">
                 <div class="card">
                     <div class="card-body">
-                        {{ form(subscriptionForm) }}
+                        {{ form(subscription_form) }}
                     </div>
                 </div>
             </div>
-        </div>
+        {% endif %}
+    </div>
 {% endblock %}

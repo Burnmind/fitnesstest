@@ -41,6 +41,12 @@
     </header>
     <body>
         <div class="container">
+            {% for message in app.flashes('notification') %}
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
             {% block body %}{% endblock %}
         </div>
     </body>
