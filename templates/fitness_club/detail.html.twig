@@ -9,14 +9,15 @@
             <p><b>Тренер: {{ group_fitness_class.couchName }}</b></p>
             <p>{{ group_fitness_class.description|raw }}</p>
         </div>
-        {% if subscription_form %}
+
             <div class="col-sm-4">
-                <div class="card">
-                    <div class="card-body">
-                        {{ form(subscription_form) }}
-                    </div>
-                </div>
+                {{ render(controller(
+                    'App\\Controller\\FitnessClubController::subscriptionForm',
+                    {
+                        groupFitnessClass: group_fitness_class,
+                        request: app.request
+                    }
+                )) }}
             </div>
-        {% endif %}
     </div>
 {% endblock %}

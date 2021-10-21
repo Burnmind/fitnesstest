@@ -31,9 +31,17 @@ class FitnessClubController extends AbstractController
     /**
      * @Route("/class/{id}", name="class_detail")
      */
-    public function detail(Request $request, GroupFitnessClasses $groupFitnessClass, NotifierInterface $notifier): Response
+    public function detail(GroupFitnessClasses $groupFitnessClass): Response
     {
-        /** @var User $user */
+        return $this->render('fitness_club/detail.html.twig', [
+            'group_fitness_class' => $groupFitnessClass
+        ]);
+    }
+
+    // Вынес формы т.к. экшн детальной получился довольно "толстым"
+    public function subscriptionForm(GroupFitnessClasses $groupFitnessClass, Request $request, NotifierInterface $notifier)
+    {
+        /** @var User|null $user */
         $user = $this->getUser();
         if ($user) {
             $entityManager = $this->getDoctrine()->getManager();
@@ -68,8 +76,7 @@ class FitnessClubController extends AbstractController
             }
         }
 
-        return $this->render('fitness_club/detail.html.twig', [
-            'group_fitness_class' => $groupFitnessClass,
+        return $this->render('fitness_club/forms/subscription.html.twig', [
             'subscription_form' => $user ? $subscriptionForm->createView() : null
         ]);
     }

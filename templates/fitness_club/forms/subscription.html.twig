@@ -1,0 +1,13 @@
+{% if subscription_form %}
+    <div class="card">
+        {% for message in app.flashes('notification') %}
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <div class="card-body">
+            {{ form(subscription_form) }}
+        </div>
+    </div>
+{% endif %}
