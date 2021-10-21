@@ -52,12 +52,19 @@ class FitnessClubController extends AbstractController
             $subscriptionForm = $this->createForm(SubscriptionType::class, $subscription);
             $subscriptionForm->handleRequest($request);
             if ($subscriptionForm->isSubmitted() && $subscriptionForm->isValid()) {
-                // обработать отписку
+                // если есть id значит способ связи существует в базе и это подписка
+                if ($subscription->getContactType()->getId()) {
+                    $entityManager->persist($subscription);
+                    $entityManager->flush();
 
-                $entityManager->persist($subscription);
-                $entityManager->flush();
+                    $notifier->send(new Notification('Подписка оформлена!', ['browser']));
+                } else {
+                    // в противном случае это отписка
+                    $entityManager->remove($subscription);
+                    $entityManager->flush();
 
-                $notifier->send(new Notification('Подписка оформлена!', ['browser']));
+                    $notifier->send(new Notification('Подписка отменена!', ['browser']));
+                }
             }
         }
 

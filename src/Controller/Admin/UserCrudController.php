@@ -6,6 +6,7 @@ use App\Entity\Sex;
 use App\Entity\User;
 use App\Repository\SexRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\BatchActionDto;
@@ -35,19 +36,21 @@ class UserCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        return [
-            ImageField::new('photo')
-                ->setBasePath('uploads/images/')
-                ->setUploadDir('public/uploads/images/'),
-            TextField::new('username'),
-            TextField::new('fullName'),
-            EmailField::new('email')->onlyWhenCreating(),
-            TelephoneField::new('phone'),
-            DateField::new('dateOfBirth'),
-            AssociationField::new('sex')->setRequired(true),
-            BooleanField::new('isBlocked'),
-            BooleanField::new('isVerified'),
-        ];
+        yield ImageField::new('photo')
+            ->setBasePath('uploads/images/')
+            ->setUploadDir('public/uploads/images/');
+        yield TextField::new('username');
+        yield TextField::new('fullName');
+
+        if ($pageName == Crud::PAGE_INDEX || $pageName == Crud::PAGE_NEW) {
+            yield EmailField::new('email');
+        }
+
+        yield TelephoneField::new('phone');
+        yield DateField::new('dateOfBirth');
+        yield AssociationField::new('sex')->setRequired(true);
+        yield BooleanField::new('isBlocked');
+        yield BooleanField::new('isVerified');
     }
 
     /**
