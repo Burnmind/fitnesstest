@@ -10,12 +10,24 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ group_fitness_class.name }}</h5>
                         <p class="card-text">{{ group_fitness_class.couchName }}</p>
-                        {% if app.user and app.user.isAdmin %}
-                            <div class="admin-info alert alert-info">
-                                <p class="card-text">
-                                    Количество подписчиков: {{ group_fitness_class.subscriptions.count() }}
-                                </p>
-                            </div>
+                        {% if app.user %}
+                            {% for subscription in app.user.subscriptions %}
+                                {% if subscription.groupFitnessClass.id == group_fitness_class.id %}
+                                    <div class="alert alert-success">
+                                        <p class="card-text">
+                                            Оформлена подписка: {{ subscription.contactType }}
+                                        </p>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if app.user.isAdmin %}
+                                <div class="alert alert-info">
+                                    <p class="card-text">
+                                        Количество подписчиков: {{ group_fitness_class.subscriptions.count() }}
+                                    </p>
+                                </div>
+                            {% endif %}
                         {% endif %}
                     </div>
                 </a>
