@@ -23,6 +23,18 @@ class Subscription
      */
     private $contactType;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="subscriptions")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $subscribedUser;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=GroupFitnessClasses::class, inversedBy="subscriptions")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $groupFitnessClass;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -36,6 +48,30 @@ class Subscription
     public function setContactType(?SubscriptionContact $contactType): self
     {
         $this->contactType = $contactType;
+
+        return $this;
+    }
+
+    public function getSubscribedUser(): ?User
+    {
+        return $this->subscribedUser;
+    }
+
+    public function setSubscribedUser(?User $subscribedUser): self
+    {
+        $this->subscribedUser = $subscribedUser;
+
+        return $this;
+    }
+
+    public function getGroupFitnessClass(): ?GroupFitnessClasses
+    {
+        return $this->groupFitnessClass;
+    }
+
+    public function setGroupFitnessClass(?GroupFitnessClasses $groupFitnessClass): self
+    {
+        $this->groupFitnessClass = $groupFitnessClass;
 
         return $this;
     }

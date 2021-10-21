@@ -3,6 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\GroupFitnessClasses;
+use App\Entity\Subscription;
+use App\Entity\User;
+use App\Form\SubscriptionType;
 use App\Repository\GroupFitnessClassesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,8 +28,20 @@ class FitnessClubController extends AbstractController
      */
     public function detail(GroupFitnessClasses $groupFitnessClass): Response
     {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if ($user) {
+            $subscription = new Subscription();
+            $subscription->setSubscribedUser($user);
+            $subscription->setGroupFitnessClass($groupFitnessClass);
+
+            $subscriptionForm = $this->createForm(SubscriptionType::class, $subscription);
+        }
+
         return $this->render('fitness_club/detail.html.twig', [
-            'groupFitnessClass' => $groupFitnessClass
+            'groupFitnessClass' => $groupFitnessClass,
+            'subscriptionForm' => $subscriptionForm->createView()
         ]);
     }
 }

@@ -86,13 +86,13 @@ class User implements UserInterface
     private $sex;
 
     /**
-     * @ORM\ManyToMany(targetEntity=GroupFitnessClasses::class, inversedBy="subscribedUsers")
+     * @ORM\OneToMany(targetEntity=Subscription::class, mappedBy="subscribedUser", orphanRemoval=true)
      */
-    private $subscription;
+    private $subscriptions;
 
     public function __construct()
     {
-        $this->subscription = new ArrayCollection();
+        $this->subscriptions = new ArrayCollection();
     }
 
 
@@ -273,26 +273,37 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @return Collection|GroupFitnessClasses[]
-     */
-    public function getSubscription(): Collection
+    public function __toString(): string
     {
-        return $this->subscription;
+        return (string)$this->getFullName();
     }
 
-    public function addSubscription(GroupFitnessClasses $subscription): self
+    /**
+     * @return Collection|Subscription[]
+     */
+    public function getSubscriptions(): Collection
     {
-        if (!$this->subscription->contains($subscription)) {
-            $this->subscription[] = $subscription;
+        return $this->subscriptions;
+    }
+
+    public function addSubscription(Subscription $subscription): self
+    {
+        if (!$this->subscriptions->contains($subscription)) {
+            $this->subscriptions[] = $subscription;
+            $subscription->setSubscribedUser($this);
         }
 
         return $this;
     }
 
-    public function removeSubscription(GroupFitnessClasses $subscription): self
+    public function removeSubscription(Subscription $subscription): self
     {
-        $this->subscription->removeElement($subscription);
+        if ($this->subscriptions->removeElement($subscription)) {
+            // set the owning side to null (unless already changed)
+            if ($subscription->getSubscribedUser() === $this) {
+                $subscription->setSubscribedUser(null);
+            }
+        }
 
         return $this;
     }

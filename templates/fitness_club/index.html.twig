@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Список групповых занятий{% endblock %}
+{% block title %} Список групповых занятий {% endblock %}
 
 {% block body %}
     <div class="row">
@@ -10,6 +10,13 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ groupFitnessClass.name }}</h5>
                         <p class="card-text">{{ groupFitnessClass.couchName }}</p>
+                        {% if app.user and app.user.isAdmin %}
+                            <div class="admin-info alert alert-info">
+                                <p class="card-text">
+                                    Количество подписчиков: {{ groupFitnessClass.subscriptions.count() }}
+                                </p>
+                            </div>
+                        {% endif %}
                     </div>
                 </a>
             </div>

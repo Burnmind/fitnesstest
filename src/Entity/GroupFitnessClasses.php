@@ -35,13 +35,13 @@ class GroupFitnessClasses
     private $description;
 
     /**
-     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="subscription")
+     * @ORM\OneToMany(targetEntity=Subscription::class, mappedBy="groupFitnessClass", orphanRemoval=true)
      */
-    private $subscribedUsers;
+    private $subscriptions;
 
     public function __construct()
     {
-        $this->subscribedUsers = new ArrayCollection();
+        $this->subscriptions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -86,27 +86,30 @@ class GroupFitnessClasses
     }
 
     /**
-     * @return Collection|User[]
+     * @return Collection|Subscription[]
      */
-    public function getSubscribedUsers(): Collection
+    public function getSubscriptions(): Collection
     {
-        return $this->subscribedUsers;
+        return $this->subscriptions;
     }
 
-    public function addSubscribedUser(User $subscribedUser): self
+    public function addSubscription(Subscription $subscription): self
     {
-        if (!$this->subscribedUsers->contains($subscribedUser)) {
-            $this->subscribedUsers[] = $subscribedUser;
-            $subscribedUser->addSubscription($this);
+        if (!$this->subscriptions->contains($subscription)) {
+            $this->subscriptions[] = $subscription;
+            $subscription->setGroupFitnessClass($this);
         }
 
         return $this;
     }
 
-    public function removeSubscribedUser(User $subscribedUser): self
+    public function removeSubscription(Subscription $subscription): self
     {
-        if ($this->subscribedUsers->removeElement($subscribedUser)) {
-            $subscribedUser->removeSubscription($this);
+        if ($this->subscriptions->removeElement($subscription)) {
+            // set the owning side to null (unless already changed)
+            if ($subscription->getGroupFitnessClass() === $this) {
+                $subscription->setGroupFitnessClass(null);
+            }
         }
 
         return $this;
