@@ -5,15 +5,13 @@ framework:
 
         transports:
             # https://symfony.com/doc/current/messenger.html#transport-configuration
-#            async:
-#                dsn: '%env(RABBITMQ_URL)%'
-#                options:
-#                    auto_setup: false
-#                    use_notify: true
-#                    check_delayed_interval: 60000
+            async:
+                dsn: '%env(RABBITMQ_URL)%'
+                options:
+                    auto_setup: false
             # failed: 'doctrine://default?queue_name=failed'
             # sync: 'sync://'
 
         routing:
             # Route your messages to the transports
-            #App\Message\NotificationMessage: async
+            App\Message\NotificationMessage: async

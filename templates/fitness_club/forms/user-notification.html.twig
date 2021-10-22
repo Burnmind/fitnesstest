@@ -1,0 +1,15 @@
+{% if user_notification_form %}
+    <div class="card">
+        {% for message in app.flashes('notification') %}
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <div class="card-body">
+            <h4>Отправить увеомление</h4>
+            <i>Шаблонные переменные:<br> %name%, %dateOfBirth%, %email%, %phone%</i>
+            {{ form(user_notification_form) }}
+        </div>
+    </div>
+{% endif %}

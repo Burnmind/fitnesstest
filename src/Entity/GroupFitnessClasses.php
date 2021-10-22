@@ -114,4 +114,24 @@ class GroupFitnessClasses
 
         return $this;
     }
+
+    /**
+     * @return Collection|Subscription[]
+     */
+    public function getEmailSubscriptions(): Collection
+    {
+        return $this->getSubscriptions()->filter(
+            fn(Subscription $subscription) => $subscription->getContactType()->getCode() == 'email'
+        );
+    }
+
+    /**
+     * @return Collection|Subscription[]
+     */
+    public function getSmsSubscriptions(): Collection
+    {
+        return $this->getSubscriptions()->filter(
+            fn(Subscription $subscription) => $subscription->getContactType()->getCode() == 'phone'
+        );
+    }
 }

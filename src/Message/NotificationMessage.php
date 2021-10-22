@@ -4,31 +4,26 @@
 namespace App\Message;
 
 
-class NotificationMessage
+interface NotificationMessage
 {
-    private int $userId;
-    private string $message;
-    private string $channel;
+    /**
+     * id подписавшегося пользователя
+     *
+     * @return int
+     */
+    public function getUserId(): int;
 
-    public function __construct(int $userId, string $message, string $channel)
-    {
-        $this->userId = $userId;
-        $this->message = $message;
-        $this->channel = $channel;
-    }
+    /**
+     * id занятия на которое подписан пользователь
+     *
+     * @return int
+     */
+    public function getClassId(): int;
 
-    public function getUserId(): int
-    {
-        return $this->userId;
-    }
-
-    public function getMessage(): string
-    {
-        return $this->message;
-    }
-
-    public function getChannel(): string
-    {
-        return $this->channel;
-    }
+    /**
+     * Сообщение для пользователя
+     *
+     * @return string
+     */
+    public function getMessage(): string;
 }

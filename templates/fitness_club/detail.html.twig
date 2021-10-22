@@ -14,8 +14,15 @@
                 {{ render(controller(
                     'App\\Controller\\FitnessClubController::subscriptionForm',
                     {
-                        groupFitnessClass: group_fitness_class,
-                        request: app.request
+                        request: app.request,
+                        groupFitnessClass: group_fitness_class
+                    }
+                )) }}
+                {{ render(controller(
+                    'App\\Controller\\FitnessClubController::userNotificationForm',
+                    {
+                        request: app.request,
+                        groupFitnessClass: group_fitness_class
                     }
                 )) }}
             </div>

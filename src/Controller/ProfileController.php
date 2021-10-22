@@ -18,11 +18,6 @@ class ProfileController extends AbstractController
     public function index(Request $request, NotifierInterface $notifier): Response
     {
         $user = $this->getUser();
-        if (!$user) {
-            return $this->redirectToRoute('class_list');
-        }
-
-
         $changePasswordForm = $this->createForm(ChangePasswordType::class, $user);
         $changePasswordForm->handleRequest($request);
         if ($changePasswordForm->isSubmitted() && $changePasswordForm->isValid()) {
