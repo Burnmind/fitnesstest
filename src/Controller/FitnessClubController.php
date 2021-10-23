@@ -8,14 +8,15 @@ use App\Entity\Subscription;
 use App\Entity\User;
 use App\Form\SubscriptionType;
 use App\Form\UserNotificationType;
-use App\Message\NotificationEmailMessage;
-use App\Message\NotificationSmsMessage;
+use App\Message\NotificationEmail;
+use App\Message\NotificationSms;
 use App\Repository\GroupFitnessClassesRepository;
 use App\Repository\SubscriptionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\Bridge\Amqp\Transport\AmqpSender;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Notifier\Notification\Notification;
 use Symfony\Component\Notifier\NotifierInterface;
@@ -44,8 +45,8 @@ class FitnessClubController extends AbstractController
     }
 
     // Вынес формы т.к. экшн детальной получился довольно "толстым"
-    public function subscriptionForm(Request $request, GroupFitnessClasses $groupFitnessClass, NotifierInterface
-    $notifier): Response
+    public function subscriptionForm(Request $request, GroupFitnessClasses $groupFitnessClass,
+                                     NotifierInterface $notifier): Response
     {
         /** @var User|null $user */
         $user = $this->getUser();
@@ -90,7 +91,8 @@ class FitnessClubController extends AbstractController
         ]);
     }
 
-    public function userNotificationForm(Request $request, GroupFitnessClasses $groupFitnessClass, MessageBusInterface $bus)
+    public function userNotificationForm(Request $request, GroupFitnessClasses $groupFitnessClass,
+                                         MessageBusInterface $bus, NotifierInterface $notifier): Response
     {
         /** @var User|null $user */
         $user = $this->getUser();
@@ -105,14 +107,18 @@ class FitnessClubController extends AbstractController
         if ($userNotificationForm->isSubmitted() && $userNotificationForm->isValid()) {
             if ($notificationMessage->getEmailMessage()) {
                 foreach ($groupFitnessClass->getEmailSubscriptions() as $subscription) {
-                    $bus->dispatch(new NotificationEmailMessage($subscription, $notificationMessage->getEmailMessage()));
+                    $bus->dispatch(new NotificationEmail($subscription, $notificationMessage->getEmailMessage()));
                 }
+
+                $notifier->send(new Notification('Email отправлены!', ['browser']));
             }
 
             if ($notificationMessage->getSmsMessage()) {
                 foreach ($groupFitnessClass->getSmsSubscriptions() as $subscription) {
-                    $bus->dispatch(new NotificationSmsMessage($subscription, $notificationMessage->getSmsMessage()));
+                    $bus->dispatch(new NotificationSms($subscription, $notificationMessage->getSmsMessage()));
                 }
+
+                $notifier->send(new Notification('Sms отправлены!', ['browser']));
             }
         }
 

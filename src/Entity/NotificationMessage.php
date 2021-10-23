@@ -6,17 +6,17 @@ namespace App\Entity;
 
 class NotificationMessage
 {
-    private string $emailMessage;
-    private string $smsMessage;
+    private string $emailMessage = '';
+    private string $smsMessage = '';
 
     public function getEmailMessage(): string
     {
         return $this->emailMessage;
     }
 
-    public function setEmailMessage(string $emailMessage): void
+    public function setEmailMessage($emailMessage): void
     {
-        $this->emailMessage = $emailMessage;
+        $this->emailMessage = (string)$emailMessage;
     }
 
     public function getSmsMessage(): string
@@ -24,8 +24,8 @@ class NotificationMessage
         return $this->smsMessage;
     }
 
-    public function setSmsMessage(string $smsMessage): void
+    public function setSmsMessage($smsMessage): void
     {
-        $this->smsMessage = $smsMessage;
+        $this->smsMessage = (string)$smsMessage;
     }
 }

@@ -7,8 +7,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UserNotificationType extends AbstractType
@@ -17,10 +15,12 @@ class UserNotificationType extends AbstractType
     {
         $builder
             ->add('emailMessage', TextareaType::class, [
-                'label' => 'Email сообщение:'
+                'label' => 'Email сообщение:',
+                'required' => false
             ])
             ->add('smsMessage', TextareaType::class, [
-                'label' => 'СМС сообщение:'
+                'label' => 'Sms сообщение:',
+                'required' => false
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Отправить'

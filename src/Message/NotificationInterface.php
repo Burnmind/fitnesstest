@@ -4,7 +4,7 @@
 namespace App\Message;
 
 
-interface NotificationMessage
+interface NotificationInterface
 {
     /**
      * id подписавшегося пользователя

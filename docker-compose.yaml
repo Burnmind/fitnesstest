@@ -19,7 +19,7 @@ services:
     ports: [ 1025, 1080 ]
 
   rabbitmq:
-    image: rabbitmq:3.7-management
+    image: rabbitmq:3.9-management
     ports: [ 5672, 15672 ]
 
 volumes:

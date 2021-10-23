@@ -6,7 +6,7 @@ namespace App\Message;
 
 use App\Entity\Subscription;
 
-class NotificationEmailMessage implements NotificationMessage
+class NotificationSms implements NotificationInterface
 {
     private int $userId;
     private int $classId;
