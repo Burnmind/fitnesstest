@@ -11,7 +11,6 @@ use App\Form\UserNotificationType;
 use App\Message\NotificationEmail;
 use App\Message\NotificationSms;
 use App\Repository\GroupFitnessClassesRepository;
-use App\Repository\SubscriptionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

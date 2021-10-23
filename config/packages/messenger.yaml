@@ -9,8 +9,9 @@ framework:
             sms:
                 dsn: "%env(RABBITMQ_DSN)%"
                 retry_strategy:
-                    # ждем 10 минут
-                    delay: 600000
+                    # ждем 10 минут 00
+                    delay: 6000
+                    multiplier: 1
             # failed: 'doctrine://default?queue_name=failed'
             # sync: 'sync://'
 
