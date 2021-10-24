@@ -9,9 +9,8 @@ framework:
             sms:
                 dsn: "%env(RABBITMQ_DSN)%"
                 retry_strategy:
-                    # ждем 10 минут 00
-                    delay: 6000
-                    multiplier: 1
+                    # переопределяем своим сервисом для бесконечных попыток отправки
+                    service: App\Services\RetryStrategy
             # failed: 'doctrine://default?queue_name=failed'
             # sync: 'sync://'
 

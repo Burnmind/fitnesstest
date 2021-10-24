@@ -26,7 +26,7 @@ abstract class AbstractNotificationHandler implements MessageHandlerInterface
     /**
      * @param NotificationInterface $message
      */
-    public function __invoke(NotificationInterface $message)
+    public function startHandling(NotificationInterface $message)
     {
         $user = $this->userRepository->findOneBy([
             'id' => $message->getUserId(),
