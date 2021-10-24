@@ -12,5 +12,6 @@ $ symfony console doctrine:migrations:migrate
 
 Можно будет авторизоваться под администратором.
 
-email|admin@mail.ru
-password|admin
+email: admin@mail.ru
+<br>
+password: admin
