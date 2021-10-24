@@ -1,10 +1,17 @@
 Фитнесс-клуб с рассылкой уведомлений
 ================
 
-После установки композера и миграций:
+После установки пакетов yarn, композера и миграций:
 
 ```
-$ composer require
+$ composer install
+```
+```
+$ yarn install
+```
+Сборка вебпака:
+```
+$ symfony run yarn encore dev
 ```
 ```
 $ symfony console doctrine:migrations:migrate

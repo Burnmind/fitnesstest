@@ -9,9 +9,6 @@
 /vendor/
 ###< symfony/framework-bundle ###
 
-# Файлы загружаемые пользователями в репе ни к чему
-/public/uploads/
-
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
 /public/build/
